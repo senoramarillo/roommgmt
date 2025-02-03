@@ -1,4 +1,4 @@
-# Project "Room Management"
+# Project "Room Management" - in progress
 
 <img src="https://i.imgur.com/qFK95sZ.png" width="250"  alt=""/>
 
