@@ -11,7 +11,7 @@
 [Swagger UI](https://bit.ly/3cWyU9g)
 
 [Docker Hub](https://hub.docker.com/r/senoramarillo/roommgmt-react)
- Test
+Test
 # Architecture
 <img src="https://i.imgur.com/h6e6k95.png" width="350px"  alt=""/>
 
@@ -48,7 +48,7 @@ The domain model consists of three entities:
 * `Building`: Represents a building.
 * `Room`: Represents a room. This is associated with a building.
 * `Meeting` (optional): Represents a meeting/lecture/event and is associated with a room.
-The required attributes of the entities are listed below.
+  The required attributes of the entities are listed below.
 
 ### Entity Building
 
@@ -99,22 +99,22 @@ A meeting has the following natural attributes:
 The application shall provide the following functions via a REST API:
 
 * Buildings
-  * List all buildings
-  * Create, modify and delete a building
-  * Search a building by building number
-  * Search all buildings with public access
+    * List all buildings
+    * Create, modify and delete a building
+    * Search a building by building number
+    * Search all buildings with public access
 * Room
-  * List all rooms
-  * Create, modify and delete a room
-  * Search a room by building number and room number
-  * Search all rooms in a building
-  * Search all rooms with public access
+    * List all rooms
+    * Create, modify and delete a room
+    * Search a room by building number and room number
+    * Search all rooms in a building
+    * Search all rooms with public access
 * Meeting
-  * List all meetings
-  * Create, modify and delete a meeting
-  * Search all meetings in a specific period (from, to)
-  * Search all meetings in a building in a specific time period (from, to)
-  * Search all meetings in a room in a specific time period (from, to)
+    * List all meetings
+    * Create, modify and delete a meeting
+    * Search all meetings in a specific period (from, to)
+    * Search all meetings in a building in a specific time period (from, to)
+    * Search all meetings in a room in a specific time period (from, to)
 
 ## Technical requirements
 

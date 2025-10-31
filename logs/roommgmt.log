@@ -1,0 +1,25 @@
+2025-10-31 13:17:35,977 INFO  [main] com.spring.roommgmt.RoomManagementApplication : Starting RoomManagementApplication using Java 21.0.9 with PID 6454 (/Users/andy/IdeaProjects/roommgmt/build/classes/java/main started by andy in /Users/andy/IdeaProjects/roommgmt)
+2025-10-31 13:17:35,978 INFO  [main] com.spring.roommgmt.RoomManagementApplication : No active profile set, falling back to 1 default profile: "default"
+2025-10-31 13:17:36,413 INFO  [main] org.springframework.data.repository.config.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31 13:17:36,435 INFO  [main] org.springframework.data.repository.config.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 3 JPA repository interfaces.
+2025-10-31 13:17:36,620 INFO  [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer : Tomcat initialized with port 8080 (http)
+2025-10-31 13:17:36,625 INFO  [main] org.apache.catalina.core.StandardService : Starting service [Tomcat]
+2025-10-31 13:17:36,625 INFO  [main] org.apache.catalina.core.StandardEngine : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-10-31 13:17:36,647 INFO  [main] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext
+2025-10-31 13:17:36,647 INFO  [main] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 653 ms
+2025-10-31 13:17:36,841 INFO  [main] org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-31 13:17:36,851 INFO  [main] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2025-10-31 13:17:36,974 INFO  [main] com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection conn1: url=jdbc:h2:file:./db/roommanagement user=ROOT
+2025-10-31 13:17:36,975 INFO  [main] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2025-10-31 13:17:37,284 INFO  [main] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31 13:17:37,383 INFO  [main] org.springframework.data.jpa.repository.query.QueryEnhancerFactory : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-31 13:17:37,765 INFO  [main] org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration : H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./db/roommanagement'
+2025-10-31 13:17:37,772 INFO  [main] org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver : Exposing 13 endpoints beneath base path '/actuator'
+2025-10-31 13:17:37,804 INFO  [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer : Tomcat started on port 8080 (http) with context path '/'
+2025-10-31 13:17:37,810 INFO  [main] com.spring.roommgmt.RoomManagementApplication : Started RoomManagementApplication in 2.059 seconds (process running for 2.317)
+2025-10-31 13:17:37,864 INFO  [RMI TCP Connection(4)-127.0.0.1] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-31 13:17:46,613 INFO  [SpringApplicationShutdownHook] org.springframework.boot.web.embedded.tomcat.GracefulShutdown : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-31 13:17:47,622 INFO  [tomcat-shutdown] org.springframework.boot.web.embedded.tomcat.GracefulShutdown : Graceful shutdown complete
+2025-10-31 13:17:47,632 INFO  [SpringApplicationShutdownHook] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31 13:17:47,634 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2025-10-31 13:17:47,636 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
