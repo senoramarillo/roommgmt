@@ -1,6 +1,7 @@
 # Gradle
 .gradle/
 build/
+!gradle/wrapper/gradle-wrapper.jar
 
 # Maven
 target/
@@ -28,6 +29,7 @@ target/
 *.iws
 *.iml
 *.ipr
+out/
 
 ### NetBeans ###
 /nbproject/private/
@@ -41,3 +43,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Local database and log folders
+db/
+log/
