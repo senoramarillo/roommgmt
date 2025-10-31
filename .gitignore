@@ -1,6 +1,12 @@
-build/
+# Gradle
 .gradle/
-.mvn
+build/
+
+# Maven
+target/
+.mvn/**
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
 
 HELP.md
 target/
