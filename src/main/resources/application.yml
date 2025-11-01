@@ -13,10 +13,12 @@ spring:
     open-in-view: false
     show-sql: true
     defer-datasource-initialization: true
+
 server:
   port: 8080
   error:
     include-message: always
+
 logging:
   pattern:
     console: "%d %-5level %logger : %msg%n"
@@ -28,20 +30,22 @@ logging:
     org.hibernate: ERROR
   file:
     name: logs/roommgmt.log
+
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "health,metrics"
   endpoint:
     health:
       show-details: always
-    metrics:
-      enabled: true
-    beans:
-      enabled: false
+
 springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
   api-docs:
-    path: /api-docs
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+  info:
+    title: Room Management API
+    version: 1.0.0
+    description: API for managing rooms
