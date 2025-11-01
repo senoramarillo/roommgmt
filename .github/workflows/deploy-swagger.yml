@@ -1,0 +1,48 @@
+name: Deploy Swagger UI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper/
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+          
+      - name: Build Spring Boot
+        run: ./gradlew clean build bootJar
+
+      - name: Start Spring Boot & export Swagger UI
+        run: |
+          nohup java -jar build/libs/*.jar &
+          # Warte auf Start (ggf. anpassen)
+          sleep 20
+          # Swagger HTML & OpenAPI JSON abrufen
+          mkdir -p swagger-output
+          curl -L http://localhost:8080/swagger-ui/index.html -o swagger-output/index.html
+          curl -L http://localhost:8080/v3/api-docs -o swagger-output/api-docs.json
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./swagger-output
