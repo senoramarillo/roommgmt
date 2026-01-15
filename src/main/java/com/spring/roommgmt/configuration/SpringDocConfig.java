@@ -11,7 +11,11 @@ public class SpringDocConfig {
 
     @Bean
     public OpenAPI apiInfo() {
-        return new OpenAPI().info(new Info().title("Room Management API").version("1.0.0"));
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Room Management API")
+                        .version("1.0.0")
+                );
     }
 
     @Bean
