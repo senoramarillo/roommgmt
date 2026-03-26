@@ -7,17 +7,36 @@ import {errorNotification, successNotification} from "./Notification";
 const {Option} = Select;
 const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
+/**
+ * BuildingDrawerForm Component
+ * 
+ * A drawer form component for creating new buildings.
+ * Handles form validation, API submission, and user notifications.
+ * 
+ * @component
+ * @param {Object} props - Component props
+ * @param {boolean} props.showDrawer - Controls visibility of the drawer
+ * @param {Function} props.setShowDrawer - Function to update drawer visibility
+ * @param {Function} props.fetchBuildings - Function to refresh the buildings list after creation
+ * @returns {JSX.Element} The drawer form component
+ */
 function BuildingDrawerForm({showDrawer, setShowDrawer, fetchBuildings}) {
-    const onCLose = () => setShowDrawer(false);
+    const onClose = () => setShowDrawer(false);
     const [submitting, setSubmitting] = useState(false);
 
+    /**
+     * Handles form submission for creating a new building.
+     * Sends building data to the backend and refreshes the buildings list on success.
+     * 
+     * @param {Object} building - The building form data
+     */
     const onFinish = building => {
         setSubmitting(true)
         console.log(JSON.stringify(building, null, 2))
         addNewBuilding(building)
             .then(() => {
                 console.log("building added")
-                onCLose();
+                onClose();
                 successNotification(
                     "Building successfully added",
                     `${building.name} was added to the system`
@@ -25,19 +44,34 @@ function BuildingDrawerForm({showDrawer, setShowDrawer, fetchBuildings}) {
                 fetchBuildings();
             }).catch(err => {
             console.log(err);
-            err.response.json().then(res => {
-                console.log(res);
+            console.log(err);
+            if (err.response?.headers.get('content-type')?.includes('application/json')) {
+                err.response.json().then(res => {
+                    console.log(res);
+                    errorNotification(
+                        "There was an issue",
+                        `${res.message} [${res.status}] [${res.error}]`,
+                        "bottomLeft"
+                    )
+                });
+            } else {
                 errorNotification(
                     "There was an issue",
-                    `${res.message} [${res.status}] [${res.error}]`,
+                    `Request failed with status ${err.response?.status}`,
                     "bottomLeft"
                 )
-            });
+            }
         }).finally(() => {
             setSubmitting(false);
         })
     };
 
+    /**
+     * Handles form validation errors.
+     * Displays alert with validation error information.
+     * 
+     * @param {Object} errorInfo - The validation error information
+     */
     const onFinishFailed = errorInfo => {
         alert(JSON.stringify(errorInfo, null, 2));
     };
@@ -45,8 +79,8 @@ function BuildingDrawerForm({showDrawer, setShowDrawer, fetchBuildings}) {
     return <Drawer
         title="Create new building"
         width={720}
-        onClose={onCLose}
-        visible={showDrawer}
+        onClose={onClose}
+        open={showDrawer}
         bodyStyle={{paddingBottom: 80}}
         footer={
             <div
@@ -54,7 +88,7 @@ function BuildingDrawerForm({showDrawer, setShowDrawer, fetchBuildings}) {
                     textAlign: 'right',
                 }}
             >
-                <Button onClick={onCLose} style={{marginRight: 8}}>
+                <Button onClick={onClose} style={{marginRight: 8}}>
                     Cancel
                 </Button>
             </div>

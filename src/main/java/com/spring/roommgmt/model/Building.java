@@ -11,6 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity class representing a Building.
+ * Represents a building in the database with a unique building number.
+ *
+ * @author Spring Room Management Team
+ * @version 1.0
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,16 +25,29 @@ import lombok.Setter;
 @Entity
 public class Building {
 
+    /**
+     * Unique database identifier for the building.
+     */
     @Id
     @GeneratedValue
     private Long id;
 
+    /**
+     * Unique building number (e.g., "B001", "Building A").
+     * This field is required and must be unique.
+     */
     @Basic(optional = false)
     @Column(nullable = false, unique = true)
     private String buildingNumber;
 
+    /**
+     * Description of the building.
+     */
     private String description;
 
+    /**
+     * Indicates whether the building is publicly accessible.
+     */
     @Basic(optional = false)
     private boolean publicAccess;
 

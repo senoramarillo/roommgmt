@@ -30,21 +30,43 @@ import {errorNotification, successNotification} from "./Notification";
 const {Header, Content, Sider} = Layout;
 const {SubMenu} = Menu;
 
+/**
+ * Removes a building and refreshes the buildings list.
+ * Handles API errors with optional chaining for safe response parsing.
+ *
+ * @param {number} buildingId the ID of the building to delete
+ * @param {Function} callback function to refresh the buildings list after deletion
+ */
 const removeBuilding = (buildingId, callback) => {
     deleteBuilding(buildingId).then(() => {
         successNotification("Building deleted", `Building with ${buildingId} was deleted`);
         callback();
-    }).catch(err => {
-        err.response.json().then(res => {
-            console.log(res);
+    }).catch(error => {
+        console.log(error.response)
+        if (error.response?.headers.get('content-type')?.includes('application/json')) {
+            error.response.json().then(response => {
+                console.log(response);
+                errorNotification(
+                    "There was an issue",
+                    `${response.message} [${response.status}] [${response.error}]`
+                )
+            });
+        } else {
             errorNotification(
                 "There was an issue",
-                `${res.message} [${res.status}] [${res.error}]`
+                `Request failed with status ${error.response?.status}`
             )
-        });
+        }
     })
 }
 
+/**
+ * Defines the table columns for the buildings table.
+ * Includes columns for ID, Building Number, Description, Public Access, and Actions.
+ *
+ * @param {Function} fetchBuildings callback function to refresh buildings after an action
+ * @returns {Array} array of column configuration objects for the Ant Design Table
+ */
 const columns = fetchBuildings => [
     {
         title: 'Id',
@@ -88,16 +110,26 @@ const columns = fetchBuildings => [
 
 const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
+/**
+ * Main App Component
+ * 
+ * Displays the Room Management System layout with a sidebar menu and buildings management interface.
+ * Manages the state for buildings list, drawer visibility, and loading state.
+ * Provides functionality to view, add, edit, and delete buildings.
+ *
+ * @component
+ * @returns {JSX.Element} The main application layout
+ */
 function App() {
-    // getAllBuildings()
-    //     .then(res => res.json)
-    //     .then(console.log);
-
     const [buildings, setBuildings] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
     const [fetching, setFetching] = useState(true);
     const [showDrawer, setShowDrawer] = useState(false);
 
+    /**
+     * Fetches all buildings from the backend API.
+     * Updates the buildings state and handles loading and error states.
+     */
     const fetchBuildings = () =>
         getAllBuildings()
             .then(response => response.json())
@@ -115,12 +147,20 @@ function App() {
             });
         }).finally(() => setFetching(false))
 
-
+    /**
+     * Effect hook to fetch buildings on component mount.
+     */
     useEffect(() => {
         console.log("component is mounted");
         fetchBuildings();
     }, []);
 
+    /**
+     * Renders the buildings content based on loading and data state.
+     * Shows loading spinner, empty state, or buildings table with actions.
+     *
+     * @returns {JSX.Element} the rendered content
+     */
     const renderBuildings = () => {
         if (fetching) {
             return <Spin indicator={antIcon}/>
@@ -215,3 +255,4 @@ function App() {
 }
 
 export default App;
+
