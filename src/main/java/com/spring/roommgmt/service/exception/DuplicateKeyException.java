@@ -8,4 +8,12 @@ package com.spring.roommgmt.service.exception;
  * @version 1.0
  */
 public class DuplicateKeyException extends RuntimeException {
+
+    public DuplicateKeyException() {
+        super();
+    }
+
+    public DuplicateKeyException(String message) {
+        super(message);
+    }
 }

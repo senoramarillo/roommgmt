@@ -1,6 +1,8 @@
 package com.spring.roommgmt.controller.dto;
 
 import com.spring.roommgmt.model.Meeting;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
 
@@ -20,8 +22,8 @@ import java.time.Instant;
  * @version 1.0
  */
 public record MeetingDTO(Long id, Long roomId,
-                         String buildingNumber, String roomNumber,
-                         String topic, Instant start, Instant end) {
+                         @NotBlank String buildingNumber, @NotBlank String roomNumber,
+                         @NotBlank String topic, @NotNull Instant start, @NotNull Instant end) {
 
     /**
      * Converts a Meeting entity to a MeetingDTO.

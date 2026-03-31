@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +38,7 @@ public class Meeting {
      * This field is required.
      */
     @Basic(optional = false)
+    @NotBlank
     private String topic;
 
     /**
@@ -43,6 +46,7 @@ public class Meeting {
      * This field is required.
      */
     @Basic(optional = false)
+    @NotNull
     private Instant start;
 
     /**
@@ -50,6 +54,7 @@ public class Meeting {
      * This field is required.
      */
     @Basic(optional = false)
+    @NotNull
     private Instant end;
 
     /**

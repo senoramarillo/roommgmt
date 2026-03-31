@@ -1,6 +1,8 @@
 package com.spring.roommgmt.controller.dto;
 
 import com.spring.roommgmt.model.Building;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  * Data Transfer Object for Building.
@@ -14,7 +16,12 @@ import com.spring.roommgmt.model.Building;
  * @author Spring Room Management Team
  * @version 1.0
  */
-public record BuildingDTO(Long id, String buildingNumber, String description, boolean publicAccess) {
+public record BuildingDTO(
+        Long id,
+        @NotBlank @Size(max = 50) String buildingNumber,
+        @Size(max = 255) String description,
+        boolean publicAccess
+) {
 
     /**
      * Converts a Building entity to a BuildingDTO.

@@ -3,6 +3,7 @@ package com.spring.roommgmt.controller;
 import com.spring.roommgmt.controller.dto.BuildingDTO;
 import com.spring.roommgmt.service.BuildingService;
 import com.spring.roommgmt.service.exception.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,7 +51,7 @@ public class BuildingController {
      * @return ResponseEntity containing the found building
      * @throws ResourceNotFoundException if the building is not found
      */
-    @GetMapping("{buildingNumber}")
+    @GetMapping("number/{buildingNumber}")
     public ResponseEntity<BuildingDTO> findByBuildingNumber(@PathVariable String buildingNumber) {
         var buildingFound = buildingService.findByBuildingNumber(buildingNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Building not found"));
@@ -74,7 +75,7 @@ public class BuildingController {
      * @return ResponseEntity containing the created building (HTTP Status 201 CREATED)
      */
     @PostMapping
-    public ResponseEntity<BuildingDTO> createNew(@RequestBody BuildingDTO building) {
+    public ResponseEntity<BuildingDTO> createNew(@Valid @RequestBody BuildingDTO building) {
         var newBuilding = buildingService.createNew(building.toBuilding());
         return ResponseEntity.status(CREATED).body(fromBuilding(newBuilding));
     }
@@ -86,20 +87,20 @@ public class BuildingController {
      * @param building the updated building data as DTO
      * @return ResponseEntity containing the updated building
      */
-    @PutMapping("{buildingNumber}")
-    public ResponseEntity<BuildingDTO> update(@PathVariable String buildingNumber, @RequestBody BuildingDTO building) {
+    @PutMapping("number/{buildingNumber}")
+    public ResponseEntity<BuildingDTO> update(@PathVariable String buildingNumber, @Valid @RequestBody BuildingDTO building) {
         return ResponseEntity.ok(fromBuilding(buildingService.update(buildingNumber, building.toBuilding())));
     }
 
     /**
-     * Deletes a building by its ID.
+     * Deletes a building by its building number.
      *
-     * @param buildingId the ID of the building to delete
+     * @param buildingNumber the building number of the building to delete
      * @return ResponseEntity with HTTP Status 200 OK
      */
-    @DeleteMapping("{buildingId}")
-    public ResponseEntity<BuildingDTO> delete(@PathVariable Long buildingId) {
-        buildingService.deleteById(buildingId);
+    @DeleteMapping("number/{buildingNumber}")
+    public ResponseEntity<BuildingDTO> delete(@PathVariable String buildingNumber) {
+        buildingService.delete(buildingNumber);
         return ResponseEntity.ok().build();
     }
 

@@ -38,6 +38,8 @@ public interface RoomService {
      */
     List<Room> findByBuildingNumber(String buildingNumber);
 
+    List<Room> findByBuildingNumberAndFloor(String buildingNumber, String floor);
+
     /**
      * Finds all publicly accessible rooms.
      *

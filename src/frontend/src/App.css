@@ -1,55 +1,182 @@
-.App {
-  text-align: center;
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(18, 52, 86, 0.2), transparent 32%),
+    linear-gradient(135deg, #eef3ef 0%, #dce9ee 100%);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app-sider.ant-layout-sider {
+  background: linear-gradient(180deg, #18324a 0%, #0f1d2c 100%);
+  box-shadow: 10px 0 30px rgba(15, 29, 44, 0.18);
 }
 
-#components-layout-demo-side .logo {
-  height: 32px;
-  margin: 16px;
-  background: rgba(255, 255, 255, 0.3);
+.brand-panel {
+  padding: 28px 20px 16px;
 }
 
-.site-layout .site-layout-background {
+.brand-panel .ant-typography {
+  color: #f3f6f8;
+  margin: 0;
+}
+
+.brand-kicker {
+  display: block;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(243, 246, 248, 0.7) !important;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.app-header {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(24, 50, 74, 0.08);
+  padding: 0 24px;
+}
+
+.header-stat {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.app-content {
+  padding: 24px;
+}
+
+.content-card {
+  margin-top: 16px;
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 20px 60px rgba(24, 50, 74, 0.12);
+}
+
+.page-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-toolbar .ant-typography {
+  margin-bottom: 0;
+}
+
+.loading-panel {
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ant-table-wrapper .ant-table {
+  background: transparent;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background: rgba(220, 233, 238, 0.55);
+}
+
+.floor-map-card {
+  margin-top: 24px;
+  border-radius: 22px;
+  background: rgba(245, 248, 250, 0.88);
+}
+
+.floor-map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 20px;
+}
+
+.floor-map-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(24, 50, 74, 0.08);
   background: #fff;
 }
 
-.site-badge-count-4 .ant-badge-count {
-  margin-left: 10px;
-  color: #999;
-  background-color: #fff;
-  box-shadow: 0 0 0 1px #d9d9d9 inset;
+.floor-map-image {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.floor-map-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #18324a;
+  color: #f7fafc;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(24, 50, 74, 0.2);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.floor-map-marker.is-selected {
+  background: #bb4d00;
+}
+
+.floor-map-sidebar {
+  min-height: 220px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(24, 50, 74, 0.08);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 16px;
 }
 
-.App-link {
-  color: #61dafb;
+.room-detail-card {
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.room-list-card {
+  width: 100%;
+}
+
+.room-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  border: 1px solid rgba(24, 50, 74, 0.08);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.room-list-item.is-selected {
+  border-color: rgba(187, 77, 0, 0.6);
+  background: rgba(255, 244, 235, 0.9);
+}
+
+@media (max-width: 960px) {
+  .app-header {
+    justify-content: flex-start;
+    overflow-x: auto;
   }
-  to {
-    transform: rotate(360deg);
+
+  .page-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .floor-map-layout {
+    grid-template-columns: 1fr;
   }
 }

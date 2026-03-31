@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,11 +40,14 @@ public class Building {
      */
     @Basic(optional = false)
     @Column(nullable = false, unique = true)
+    @NotBlank
+    @Size(max = 50)
     private String buildingNumber;
 
     /**
      * Description of the building.
      */
+    @Size(max = 255)
     private String description;
 
     /**

@@ -2,6 +2,7 @@ package com.spring.roommgmt.repository;
 
 import com.spring.roommgmt.model.Building;
 import com.spring.roommgmt.model.Room;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,6 +18,10 @@ import java.util.Optional;
  */
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
+    @Override
+    @EntityGraph(attributePaths = "building")
+    List<Room> findAll();
+
     /**
      * Finds a room by its building and room number.
      *
@@ -24,6 +29,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
      * @param roomNumber the room number to search for
      * @return Optional containing the found room
      */
+    @EntityGraph(attributePaths = "building")
     Optional<Room> findByBuildingAndRoomNumber(Building building, String roomNumber);
 
     /**
@@ -32,7 +38,13 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
      * @param building the building entity
      * @return List of rooms in the specified building
      */
+    @EntityGraph(attributePaths = "building")
     List<Room> findByBuilding(Building building);
+
+    @EntityGraph(attributePaths = "building")
+    List<Room> findByBuildingAndFloorOrderByRoomNumber(Building building, String floor);
+
+    boolean existsByBuilding(Building building);
 
     /**
      * Finds all rooms in publicly accessible buildings.
@@ -40,6 +52,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
      *
      * @return List of all public rooms
      */
+    @EntityGraph(attributePaths = "building")
     @Query("select room from Room room join room.building building where building.publicAccess = true")
     List<Room> findPublicRooms();
 

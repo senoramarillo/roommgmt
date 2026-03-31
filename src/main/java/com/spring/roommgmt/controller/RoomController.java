@@ -3,6 +3,7 @@ package com.spring.roommgmt.controller;
 import com.spring.roommgmt.controller.dto.RoomDTO;
 import com.spring.roommgmt.service.RoomService;
 import com.spring.roommgmt.service.exception.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -73,8 +75,14 @@ public class RoomController {
      * @return List of rooms in the specified building
      */
     @GetMapping("buildings/{buildingNumber}/rooms")
-    public List<RoomDTO> findByBuilding(@PathVariable String buildingNumber) {
-        return roomService.findByBuildingNumber(buildingNumber).stream().map(RoomDTO::fromRoom).toList();
+    public List<RoomDTO> findByBuilding(
+            @PathVariable String buildingNumber,
+            @RequestParam(name = "floor", required = false) String floor
+    ) {
+        var rooms = floor == null || floor.isBlank()
+                ? roomService.findByBuildingNumber(buildingNumber)
+                : roomService.findByBuildingNumberAndFloor(buildingNumber, floor);
+        return rooms.stream().map(RoomDTO::fromRoom).toList();
     }
 
     /**
@@ -85,7 +93,7 @@ public class RoomController {
      * @return ResponseEntity containing the created room (HTTP Status 201 CREATED)
      */
     @PostMapping("buildings/{buildingNumber}/rooms")
-    public ResponseEntity<RoomDTO> createNew(@PathVariable String buildingNumber, @RequestBody RoomDTO room) {
+    public ResponseEntity<RoomDTO> createNew(@PathVariable String buildingNumber, @Valid @RequestBody RoomDTO room) {
         var newRoom = roomService.createNew(buildingNumber, room.toRoom());
         return ResponseEntity.status(CREATED).body(fromRoom(newRoom));
     }
@@ -99,7 +107,7 @@ public class RoomController {
      * @return ResponseEntity containing the updated room
      */
     @PutMapping("buildings/{buildingNumber}/rooms/{roomNumber}")
-    public ResponseEntity<RoomDTO> update(@PathVariable String buildingNumber, @PathVariable String roomNumber, @RequestBody RoomDTO room) {
+    public ResponseEntity<RoomDTO> update(@PathVariable String buildingNumber, @PathVariable String roomNumber, @Valid @RequestBody RoomDTO room) {
         var updatedRoom = roomService.update(buildingNumber, roomNumber, room.toRoom());
         return ResponseEntity.ok(fromRoom(updatedRoom));
     }

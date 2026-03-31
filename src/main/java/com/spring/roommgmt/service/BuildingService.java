@@ -60,11 +60,4 @@ public interface BuildingService {
      */
     void delete(String buildingNumber);
 
-    /**
-     * Deletes a building by its ID.
-     *
-     * @param buildingId the ID of the building to delete
-     */
-    void deleteById(Long buildingId);
-
 }

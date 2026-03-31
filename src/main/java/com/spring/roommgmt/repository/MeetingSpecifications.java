@@ -63,7 +63,7 @@ public class MeetingSpecifications {
      * @return Specification for meetings ending before the given time
      */
     public static Specification<Meeting> endsBefore(Instant end) {
-        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get(String.valueOf(Meeting_.end)), end);
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get(Meeting_.end), end);
     }
 
     /**
@@ -76,7 +76,7 @@ public class MeetingSpecifications {
         return (root, query, builder) -> {
             var roomJoin = root.join(String.valueOf(Meeting_.room));
             var buildingJoin = roomJoin.join(String.valueOf(Room_.building));
-            return builder.like(buildingJoin.get(String.valueOf(Building_.buildingNumber)), buildingNumber);
+            return builder.equal(buildingJoin.get(String.valueOf(Building_.buildingNumber)), buildingNumber);
         };
     }
 
@@ -92,8 +92,8 @@ public class MeetingSpecifications {
             var roomJoin = root.join(String.valueOf(Meeting_.room));
             var buildingJoin = roomJoin.join(String.valueOf(Room_.building));
             return builder.and(
-                    builder.like(roomJoin.get(String.valueOf(Room_.roomNumber)), roomNumber),
-                    builder.like(buildingJoin.get(String.valueOf(Building_.buildingNumber)), buildingNumber)
+                    builder.equal(roomJoin.get(String.valueOf(Room_.roomNumber)), roomNumber),
+                    builder.equal(buildingJoin.get(String.valueOf(Building_.buildingNumber)), buildingNumber)
             );
         };
     }

@@ -7,6 +7,7 @@ import com.spring.roommgmt.repository.MeetingRepository;
 import com.spring.roommgmt.repository.MeetingSpecifications;
 import com.spring.roommgmt.service.MeetingService;
 import com.spring.roommgmt.service.RoomService;
+import com.spring.roommgmt.service.exception.ResourceConflictException;
 import com.spring.roommgmt.service.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,9 @@ public class MeetingServiceImpl implements MeetingService {
      */
     @Override
     public Meeting createNew(String buildingNumber, String roomNumber, Meeting meeting) {
+        validateMeetingTimeRange(meeting);
         var room = findRoomOrThrow(buildingNumber, roomNumber);
+        ensureNoOverlap(room, meeting);
         meeting.setRoom(room);
         return meetingRepository.save(meeting);
     }
@@ -96,10 +99,12 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public Meeting update(Long meetingId, String buildingNumber, String roomNumber, Meeting meeting) {
         if (!meetingId.equals(meeting.getId())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Meeting ID in path and payload must match");
         }
+        validateMeetingTimeRange(meeting);
         var room = findRoomOrThrow(buildingNumber, roomNumber);
         var meetingToBeUpdated = findById(meetingId).orElseThrow(ResourceNotFoundException::new);
+        ensureNoOverlap(room, meeting, meetingId);
         return update(meetingToBeUpdated, meeting, room);
     }
 
@@ -143,6 +148,24 @@ public class MeetingServiceImpl implements MeetingService {
     private Room findRoomOrThrow(String buildingNumber, String roomNumber) {
         return roomService.findByBuildingNumberAndRoomNumber(buildingNumber, roomNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
+    }
+
+    private void validateMeetingTimeRange(Meeting meeting) {
+        if (!meeting.getStart().isBefore(meeting.getEnd())) {
+            throw new IllegalArgumentException("Meeting start must be before meeting end");
+        }
+    }
+
+    private void ensureNoOverlap(Room room, Meeting meeting) {
+        if (meetingRepository.existsByRoomAndStartLessThanAndEndGreaterThan(room, meeting.getEnd(), meeting.getStart())) {
+            throw new ResourceConflictException("Meeting overlaps with an existing meeting in the same room");
+        }
+    }
+
+    private void ensureNoOverlap(Room room, Meeting meeting, Long meetingId) {
+        if (meetingRepository.existsByRoomAndStartLessThanAndEndGreaterThanAndIdNot(room, meeting.getEnd(), meeting.getStart(), meetingId)) {
+            throw new ResourceConflictException("Meeting overlaps with an existing meeting in the same room");
+        }
     }
 
 }

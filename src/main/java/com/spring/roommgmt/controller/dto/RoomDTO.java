@@ -1,6 +1,10 @@
 package com.spring.roommgmt.controller.dto;
 
 import com.spring.roommgmt.model.Room;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Data Transfer Object for Room.
@@ -16,7 +20,17 @@ import com.spring.roommgmt.model.Room;
  * @author Spring Room Management Team
  * @version 1.0
  */
-public record RoomDTO(Long id, Long buildingId, String buildingNumber, String roomNumber, Integer seats, boolean projectorPresent) {
+public record RoomDTO(
+        Long id,
+        Long buildingId,
+        @NotBlank String buildingNumber,
+        @NotBlank String roomNumber,
+        @NotBlank String floor,
+        @NotNull Double mapX,
+        @NotNull Double mapY,
+        @NotNull @Min(1) @Max(9999) Integer seats,
+        boolean projectorPresent
+) {
 
     /**
      * Converts a Room entity to a RoomDTO.
@@ -30,6 +44,9 @@ public record RoomDTO(Long id, Long buildingId, String buildingNumber, String ro
                 room.getBuilding().getId(),
                 room.getBuilding().getBuildingNumber(),
                 room.getRoomNumber(),
+                room.getFloor(),
+                room.getMapX(),
+                room.getMapY(),
                 room.getSeats(),
                 room.isProjectorPresent()
         );
@@ -41,7 +58,7 @@ public record RoomDTO(Long id, Long buildingId, String buildingNumber, String ro
      * @return the converted Room entity
      */
     public Room toRoom() {
-        return new Room(id, roomNumber, seats, projectorPresent);
+        return new Room(id, roomNumber, floor, mapX, mapY, seats, projectorPresent);
     }
 
 }

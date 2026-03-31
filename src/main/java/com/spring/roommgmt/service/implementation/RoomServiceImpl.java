@@ -2,10 +2,12 @@ package com.spring.roommgmt.service.implementation;
 
 import com.spring.roommgmt.model.Building;
 import com.spring.roommgmt.model.Room;
+import com.spring.roommgmt.repository.MeetingRepository;
 import com.spring.roommgmt.repository.RoomRepository;
 import com.spring.roommgmt.service.BuildingService;
 import com.spring.roommgmt.service.RoomService;
 import com.spring.roommgmt.service.exception.DuplicateKeyException;
+import com.spring.roommgmt.service.exception.ResourceConflictException;
 import com.spring.roommgmt.service.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ import java.util.Optional;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
+    private final MeetingRepository meetingRepository;
 
     private final BuildingService buildingService;
 
@@ -68,6 +71,12 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.findByBuilding(building);
     }
 
+    @Override
+    public List<Room> findByBuildingNumberAndFloor(String buildingNumber, String floor) {
+        var building = findBuildingOrThrow(buildingNumber);
+        return roomRepository.findByBuildingAndFloorOrderByRoomNumber(building, floor);
+    }
+
     /**
      * Retrieves all publicly accessible rooms.
      *
@@ -91,7 +100,7 @@ public class RoomServiceImpl implements RoomService {
     public Room createNew(String buildingNumber, Room room) {
         var building = findBuildingOrThrow(buildingNumber);
         if (findByBuildingNumberAndRoomNumber(building.getBuildingNumber(), room.getRoomNumber()).isPresent()) {
-            throw new DuplicateKeyException();
+            throw new DuplicateKeyException("A room with this room number already exists in the building");
         }
         room.setBuilding(building);
         return roomRepository.save(room);
@@ -113,6 +122,9 @@ public class RoomServiceImpl implements RoomService {
             throw new IllegalArgumentException();
         }
         var roomToBeUpdated = findRoomOrThrow(buildingNumber, roomNumber);
+        roomToBeUpdated.setFloor(room.getFloor());
+        roomToBeUpdated.setMapX(room.getMapX());
+        roomToBeUpdated.setMapY(room.getMapY());
         roomToBeUpdated.setSeats(room.getSeats());
         roomToBeUpdated.setProjectorPresent(room.isProjectorPresent());
 
@@ -129,6 +141,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void delete(String buildingNumber, String roomNumber) {
         var roomToBeDeleted = findRoomOrThrow(buildingNumber, roomNumber);
+        if (meetingRepository.existsByRoom(roomToBeDeleted)) {
+            throw new ResourceConflictException("Room cannot be deleted while meetings are still scheduled in it");
+        }
         roomRepository.delete(roomToBeDeleted);
     }
 

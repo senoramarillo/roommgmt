@@ -1,57 +1,78 @@
 package com.spring.roommgmt.controller;
 
-
+import com.spring.roommgmt.controller.dto.ApiErrorResponse;
 import com.spring.roommgmt.service.exception.DuplicateKeyException;
+import com.spring.roommgmt.service.exception.ResourceConflictException;
 import com.spring.roommgmt.service.exception.ResourceNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.Instant;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 /**
  * Global Exception Handler Controller.
  * Handles exceptions thrown across the application and maps them to appropriate HTTP responses.
  * Uses @ControllerAdvice to provide centralized exception handling for all controllers.
- *
- * @author Spring Room Management Team
- * @version 1.0
  */
 @ControllerAdvice
 public class ExceptionController {
 
-    /**
-     * Handles DuplicateKeyException.
-     * Returns HTTP 409 Conflict status when attempting to create a duplicate resource.
-     *
-     * @return ResponseEntity with HTTP Status 409 Conflict
-     */
     @ExceptionHandler(DuplicateKeyException.class)
-    public ResponseEntity<HttpStatus> throwConflict() {
-        return ResponseEntity.status(CONFLICT).build();
+    public ResponseEntity<ApiErrorResponse> throwConflict(DuplicateKeyException exception, HttpServletRequest request) {
+        return buildErrorResponse(CONFLICT, exception.getMessage(), request, Map.of());
     }
 
-    /**
-     * Handles IllegalArgumentException.
-     * Returns HTTP 400 Bad Request status when invalid arguments are provided.
-     *
-     * @return ResponseEntity with HTTP Status 400 Bad Request
-     */
+    @ExceptionHandler(ResourceConflictException.class)
+    public ResponseEntity<ApiErrorResponse> throwResourceConflict(ResourceConflictException exception, HttpServletRequest request) {
+        return buildErrorResponse(CONFLICT, exception.getMessage(), request, Map.of());
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<HttpStatus> throwBadRequest() {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<ApiErrorResponse> throwBadRequest(IllegalArgumentException exception, HttpServletRequest request) {
+        return buildErrorResponse(BAD_REQUEST, exception.getMessage(), request, Map.of());
     }
 
-    /**
-     * Handles ResourceNotFoundException.
-     * Returns HTTP 404 Not Found status when a requested resource cannot be found.
-     *
-     * @return ResponseEntity with HTTP Status 404 Not Found
-     */
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<HttpStatus> throwNotFound() {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<ApiErrorResponse> throwNotFound(ResourceNotFoundException exception, HttpServletRequest request) {
+        return buildErrorResponse(NOT_FOUND, exception.getMessage(), request, Map.of());
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> throwValidationError(MethodArgumentNotValidException exception, HttpServletRequest request) {
+        var validationErrors = exception.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .collect(toMap(
+                        fieldError -> fieldError.getField(),
+                        fieldError -> fieldError.getDefaultMessage() == null ? "Invalid value" : fieldError.getDefaultMessage(),
+                        (left, right) -> left
+                ));
+        return buildErrorResponse(BAD_REQUEST, "Request validation failed", request, validationErrors);
+    }
+
+    private ResponseEntity<ApiErrorResponse> buildErrorResponse(
+            HttpStatus status,
+            String message,
+            HttpServletRequest request,
+            Map<String, String> validationErrors
+    ) {
+        return ResponseEntity.status(status).body(new ApiErrorResponse(
+                Instant.now(),
+                status.value(),
+                status.getReasonPhrase(),
+                message == null || message.isBlank() ? status.getReasonPhrase() : message,
+                request.getRequestURI(),
+                validationErrors
+        ));
+    }
 }

@@ -47,3 +47,12 @@ build/
 # Local database and log folders
 db/
 log/
+logs/
+
+# OS / local editor noise
+.DS_Store
+**/.DS_Store
+
+# Local frontend runtime artifacts
+src/frontend/node/
+src/package-lock.json

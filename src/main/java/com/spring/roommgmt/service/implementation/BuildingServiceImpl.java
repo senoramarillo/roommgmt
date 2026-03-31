@@ -2,8 +2,10 @@ package com.spring.roommgmt.service.implementation;
 
 import com.spring.roommgmt.model.Building;
 import com.spring.roommgmt.repository.BuildingRepository;
+import com.spring.roommgmt.repository.RoomRepository;
 import com.spring.roommgmt.service.BuildingService;
 import com.spring.roommgmt.service.exception.DuplicateKeyException;
+import com.spring.roommgmt.service.exception.ResourceConflictException;
 import com.spring.roommgmt.service.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class BuildingServiceImpl implements BuildingService {
 
     private final BuildingRepository buildingRepository;
+    private final RoomRepository roomRepository;
 
     /**
      * Retrieves all buildings from the repository.
@@ -67,7 +70,7 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Building createNew(Building building) {
         if (buildingRepository.findByBuildingNumber(building.getBuildingNumber()).isPresent()) {
-            throw new DuplicateKeyException();
+            throw new DuplicateKeyException("A building with this building number already exists");
         }
         return buildingRepository.save(building);
     }
@@ -101,17 +104,10 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public void delete(String buildingNumber) {
         var buildingToBeDeleted = findBuildingOrThrow(buildingNumber);
+        if (roomRepository.existsByBuilding(buildingToBeDeleted)) {
+            throw new ResourceConflictException("Building cannot be deleted while rooms still belong to it");
+        }
         buildingRepository.delete(buildingToBeDeleted);
-    }
-
-    /**
-     * Deletes a building by its ID.
-     *
-     * @param buildingId the ID of the building to delete
-     */
-    @Override
-    public void deleteById(Long buildingId) {
-        buildingRepository.deleteById(buildingId);
     }
 
     /**

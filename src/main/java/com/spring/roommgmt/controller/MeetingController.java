@@ -3,6 +3,7 @@ package com.spring.roommgmt.controller;
 import com.spring.roommgmt.controller.dto.MeetingDTO;
 import com.spring.roommgmt.model.MeetingCriteria;
 import com.spring.roommgmt.service.MeetingService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +69,7 @@ public class MeetingController {
      * @return ResponseEntity containing the created meeting (HTTP Status 201 CREATED)
      */
     @PostMapping
-    public ResponseEntity<MeetingDTO> createNew(@RequestBody MeetingDTO meeting) {
+    public ResponseEntity<MeetingDTO> createNew(@Valid @RequestBody MeetingDTO meeting) {
         var newMeeting = meetingService.createNew(meeting.buildingNumber(), meeting.roomNumber(), meeting.toMeeting());
         return ResponseEntity.status(CREATED).body(fromMeeting(newMeeting));
     }
@@ -81,7 +82,7 @@ public class MeetingController {
      * @return ResponseEntity containing the updated meeting
      */
     @PutMapping("{meetingId}")
-    public ResponseEntity<MeetingDTO> update(@PathVariable Long meetingId, @RequestBody MeetingDTO dto) {
+    public ResponseEntity<MeetingDTO> update(@PathVariable Long meetingId, @Valid @RequestBody MeetingDTO dto) {
         var updatedMeeting = meetingService.update(meetingId, dto.buildingNumber(), dto.roomNumber(), dto.toMeeting());
         return ResponseEntity.ok(fromMeeting(updatedMeeting));
     }
@@ -121,6 +122,12 @@ public class MeetingController {
      * @return MeetingCriteria with the provided filters
      */
     private MeetingCriteria createCriteriaFrom(LocalDateTime start, LocalDateTime end, String buildingNumber, String roomNumber) {
+        if (start != null && end != null && start.isAfter(end)) {
+            throw new IllegalArgumentException("Meeting search start must be before or equal to end");
+        }
+        if (roomNumber != null && buildingNumber == null) {
+            throw new IllegalArgumentException("room-number filter requires building-number");
+        }
         return new MeetingCriteria(
                 start != null ? start.atZone(ZoneId.systemDefault()).toInstant() : null,
                 end != null ? end.atZone(ZoneId.systemDefault()).toInstant() : null,
