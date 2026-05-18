@@ -1,4 +1,4 @@
-# Project "Room Management" - in progress (May 2026)
+# Project "Room Management" - in progress (May / June 2026)
 
 <img src="https://i.imgur.com/qFK95sZ.png" width="250"  alt=""/>
 
