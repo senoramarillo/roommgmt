@@ -2,12 +2,15 @@ package com.spring.roommgmt.repository;
 
 import com.spring.roommgmt.model.Meeting;
 import com.spring.roommgmt.model.Room;
+import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository interface for Meeting entities.
@@ -20,16 +23,19 @@ import java.time.Instant;
 public interface MeetingRepository extends JpaRepository<Meeting, Long>, JpaSpecificationExecutor<Meeting> {
 
     @Override
+    @NonNull
     @EntityGraph(attributePaths = {"room", "room.building"})
-    java.util.List<Meeting> findAll();
+    List<Meeting> findAll();
 
     @Override
+    @NonNull
     @EntityGraph(attributePaths = {"room", "room.building"})
-    java.util.List<Meeting> findAll(Specification<Meeting> specification);
+    List<Meeting> findAll(Specification<Meeting> specification);
 
     @Override
+    @NonNull
     @EntityGraph(attributePaths = {"room", "room.building"})
-    java.util.Optional<Meeting> findById(Long id);
+    Optional<Meeting> findById(@NonNull Long id);
 
     boolean existsByRoom(Room room);
 
