@@ -1,6 +1,6 @@
 # Project "Room Management" - in progress (June 2026)
 
-##TODO: Fix Frontend issues
+## TODO: Fix Frontend issues
 
 <img src="https://i.imgur.com/qFK95sZ.png" width="250"  alt=""/>
 
