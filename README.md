@@ -1,5 +1,7 @@
 # Project "Room Management" - in progress (June 2026)
 
+##TODO: Fix Frontend issues
+
 <img src="https://i.imgur.com/qFK95sZ.png" width="250"  alt=""/>
 
 [![Build Status](https://app.travis-ci.com/senoramarillo/roommgmt-react.svg?branch=main)](https://app.travis-ci.com/senoramarillo/roommgmt-react)
