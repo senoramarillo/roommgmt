@@ -1,4 +1,4 @@
-# Project "Room Management" - in progress (June 2026)
+# Project "Room Management" - in progress (until August 2026)
 
 ## TODO: Fix Frontend issues
 
