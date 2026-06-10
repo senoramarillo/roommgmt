@@ -1,6 +1,6 @@
 # Project "Room Management" - in progress (until August 2026)
 
-## TODO: Fix Frontend issues, add Spring Security Features
+## TODO: Fix Frontend issues, add Spring Security Features, Pipeline not working
 
 <img src="https://i.imgur.com/qFK95sZ.png" width="250"  alt=""/>
 
