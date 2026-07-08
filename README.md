@@ -1,4 +1,4 @@
-# Project "Room Management" - in progress (until Sep 2026)
+# Project "Room Management" - in progress
 
 ## TODO: Fix Frontend issues, add Spring Security Features, pipeline not working ...
 
