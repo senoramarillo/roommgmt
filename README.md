@@ -1,6 +1,6 @@
 # Project "Room Management" - in progress
 
-## TODO: Fix Frontend issues, add Spring Security Features, pipeline not working ...
+## TODO: Fix Frontend issues, add Spring Security Features, pipeline not working, correct README ...
 
 <img src="https://i.imgur.com/qFK95sZ.png" width="250"  alt=""/>
 
